@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *cria_titulo(char titulo[]);
-
 int main() {
-    char titulo[54];
+    FILE *listaNotas;
     int opc;
+
+    listaNotas = fopen(".listaNotas.dat", "a");
 
     puts("===============");
     puts("[1]- Nova Nota\t[2]- Ver Notas\n");
@@ -16,14 +16,16 @@ int main() {
 
     switch(opc){
         case (1):
-            printf("%s", cria_titulo(titulo));
+            system("./nova-nota.sh");
 
         break;
 
         case (2):
+            system("ls /home/pedro/Documents/Anotacoes/");
         break;
 
         case (3):
+
         break;
 
         case (4):
@@ -35,14 +37,6 @@ int main() {
 
     puts("Continua aqui");
 
+fclose(listaNotas);
 return 0;
-}
-
-char *cria_titulo(char titulo[]){
-    printf("Titulo da nota: ");
-    fgets(titulo, 50, stdin);
-
-    strcat("nano ", titulo);
-
-    return titulo;
 }
