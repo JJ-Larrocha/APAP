@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+ 
+int Quantidade_Notas(FILE *listaNotas);
 
 int main() {
     FILE *listaNotas;
@@ -25,7 +27,7 @@ int main() {
         break;
 
         case (3):
-
+            printf("%d\n", Quantidade_Notas(listaNotas));
         break;
 
         case (4):
@@ -39,4 +41,18 @@ int main() {
 
 fclose(listaNotas);
 return 0;
+}
+
+ int Quantidade_Notas(FILE *listaNotas){
+    int count = 0;
+    char ch;
+
+    while(!feof(listaNotas)){
+        ch = fgetc(listaNotas);
+        if(ch == '\n'){
+            count++;
+        }
+    }
+
+    return count;
 }
