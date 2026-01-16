@@ -2,57 +2,92 @@
 #include <stdlib.h>
 #include <string.h>
  
-int Quantidade_Notas(FILE *listaNotas);
+struct celula{
+    char nome[50];
+    struct celula *prox;
+};typedef struct celula cel;
+
+void append(cel *celula, char nome[]);
+void Lista_Titulos(cel *celula, FILE *listaNotas);
 
 int main() {
     FILE *listaNotas;
-    int opc;
+    int opc, sair=0;
+    cel *titulos = NULL;
+
+    titulos = (cel*) malloc (sizeof(cel));
+    titulos->prox = NULL;
 
     listaNotas = fopen(".listaNotas.dat", "a");
+    
+    while(!sair){
+        puts("===============");
+        puts("[1]- Nova Nota\t[2]- Ver Notas\n");
+        puts("[3]- Excluir Notas\t[4]- Sair\n");
+        scanf("%d%*c", &opc);
+        puts("---------------\n");
 
-    puts("===============");
-    puts("[1]- Nova Nota\t[2]- Ver Notas\n");
-    puts("[3]- Excluir Notas\t[4]- Sair\n");
-    scanf("%d%*c", &opc);
-    puts("---------------\n");
+        switch(opc){
+            case (1):
+                system("./nova-nota.sh");
 
-    switch(opc){
-        case (1):
-            system("./nova-nota.sh");
+            break;
 
-        break;
+            case (2):
+                system("ls /home/pedro/Documents/Anotacoes/");
+            break;
 
-        case (2):
-            system("ls /home/pedro/Documents/Anotacoes/");
-        break;
+            case (3):
+                Lista_Titulos(titulos, listaNotas);
+                while (titulos->prox != NULL) {
+                    printf("%s\n", titulos->nome);
 
-        case (3):
-            printf("%d\n", Quantidade_Notas(listaNotas));
-        break;
+                    titulos->prox = titulos->prox->prox;
+                }
+                
+            break;
 
-        case (4):
-        break;
+            case (4):
+                sair = 1;
+            break;
 
-        default: 
-            puts("Opcao Inexistente!");
+            default: 
+                puts("Opcao Inexistente!");
+        }
     }
-
-    puts("Continua aqui");
 
 fclose(listaNotas);
 return 0;
 }
 
- int Quantidade_Notas(FILE *listaNotas){
-    int count = 0;
-    char ch;
+void Lista_Titulos(cel *celula, FILE *listaNotas){
+    puts("ListaTitulos");
+    int nread;
+    char nome[50];
 
     while(!feof(listaNotas)){
-        ch = fgetc(listaNotas);
-        if(ch == '\n'){
-            count++;
+        
+        puts("to no loop");
+        nread = fscanf(listaNotas, "%s", nome);
+        printf("nome: %s\n", nome);
+        append(celula, nome);
+
+        if(nread==0){
+            return;
         }
     }
+}
 
-    return count;
+void append(cel *celula, char nome[]){
+    cel *nova = (cel*) malloc (sizeof(cel));
+    nova->prox = NULL;
+    
+    puts("antes do while");
+    while(celula->prox != NULL){
+        celula = celula->prox;
+    }
+    puts("depois do while");
+
+    celula->prox = nova;
+    strcpy(celula->nome, nome);
 }
